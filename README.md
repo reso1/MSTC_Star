@@ -1,5 +1,5 @@
 # MSTC-Star
-> code with ICRA'21 paper - MSTC*: Multi-robot Coverage Path Planning under Physical Constraints. [[paper]](https://reso1.github.io/blog/assets/docs/papers/ICRA21-MSTC_Star.pdf), [[video]](https://vimeo.com/535512748).
+> code with ICRA'21 paper - MSTC*: Multi-robot Coverage Path Planning under Physical Constraints. [[paper]](https://arxiv.org/abs/2108.04632), [[video]](https://vimeo.com/535512748).
 
 ## Description
 - **Terrain filtering**: implementations of terrain-slope based map filtering, terrain segmentation network, as well as map fusing and graph generating.
