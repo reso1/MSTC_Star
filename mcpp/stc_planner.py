@@ -180,8 +180,8 @@ class STCPlanner():
             else:
                 self.__exit_error__(self.generate_decomposed_graph)
 
-            # w = G[s][t]['weight']
-            decomped_G.add_edges_from(dire_edges, weight=0.5)
+            w = G[s][t]['weight']
+            decomped_G.add_edges_from(dire_edges, weight=0.5*w)
             decomped_G.add_edges_from(diag_edges, weight=0.5 * sqrt_2)
 
         return decomped_G
