@@ -337,7 +337,7 @@ class RTCPlanner:
             # b) pick the heavy rooted subtree with smallest weight to split
             sorted_nodes = sorted(T.nodes.data(), key=lambda x: x[1]['weight'])
             for node, data in sorted_nodes:
-                if data['parent'] and data['weight'] >= 2*B:
+                if data['weight'] >= 2*B:
                     # bounching edges emanating from heavy_node until 2B
                     S, w_Te = nx.Graph(), 0
                     N = [(n, T.nodes[n]['weight']) for n in T.neighbors(node)]
