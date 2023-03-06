@@ -134,9 +134,6 @@ class STCPlanner():
             for i in range(4):
                 decomped_G.add_edge(
                     subnode[i], subnode[(i+1) % 4], weight=0.5)
-            # diagonal edges between subnodes
-            decomped_G.add_edge(subnode[0], subnode[2], weight=0.5)
-            decomped_G.add_edge(subnode[1], subnode[3], weight=0.5)
 
         sqrt_2 = math.sqrt(2)
         # 2) edges connecting R into decomposed G
@@ -155,34 +152,29 @@ class STCPlanner():
                 t_nw_node = self.__get_subnode_coords__(t, 'NW')
                 t_ne_node = self.__get_subnode_coords__(t, 'NE')
                 dire_edges = [(s_sw_node, t_nw_node), (s_se_node, t_ne_node)]
-                diag_edges = [(s_sw_node, t_ne_node), (s_se_node, t_nw_node)]
             elif direction == 1:
                 s_se_node = self.__get_subnode_coords__(s, 'SE')
                 s_ne_node = self.__get_subnode_coords__(s, 'NE')
                 t_sw_node = self.__get_subnode_coords__(t, 'SW')
                 t_nw_node = self.__get_subnode_coords__(t, 'NW')
                 dire_edges = [(s_se_node, t_sw_node), (s_ne_node, t_nw_node)]
-                diag_edges = [(s_se_node, t_nw_node), (s_ne_node, t_sw_node)]
             elif direction == 2:
                 s_ne_node = self.__get_subnode_coords__(s, 'NE')
                 s_nw_node = self.__get_subnode_coords__(s, 'NW')
                 t_se_node = self.__get_subnode_coords__(t, 'SE')
                 t_sw_node = self.__get_subnode_coords__(t, 'SW')
                 dire_edges = [(s_ne_node, t_se_node), (s_nw_node, t_sw_node)]
-                diag_edges = [(s_ne_node, t_sw_node), (s_nw_node, t_se_node)]
             elif direction == 3:
                 s_nw_node = self.__get_subnode_coords__(s, 'NW')
                 s_sw_node = self.__get_subnode_coords__(s, 'SW')
                 t_ne_node = self.__get_subnode_coords__(t, 'NE')
                 t_se_node = self.__get_subnode_coords__(t, 'SE')
                 dire_edges = [(s_nw_node, t_ne_node), (s_sw_node, t_se_node)]
-                diag_edges = [(s_nw_node, t_se_node), (s_sw_node, t_ne_node)]
             else:
                 self.__exit_error__(self.generate_decomposed_graph)
 
             w = G[s][t]['weight']
             decomped_G.add_edges_from(dire_edges, weight=0.5*w)
-            decomped_G.add_edges_from(diag_edges, weight=0.5 * sqrt_2)
 
         return decomped_G
 
