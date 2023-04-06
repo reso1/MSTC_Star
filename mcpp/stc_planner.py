@@ -133,14 +133,14 @@ class STCPlanner():
             subnode = [self.__get_subnode_coords__(node, d) for d in direction]
             for i in range(4):
                 decomped_G.add_edge(
-                    subnode[i], subnode[(i+1) % 4], weight=0.5)
+                    subnode[i], subnode[(i+1) % 4], weight=0)
 
         sqrt_2 = math.sqrt(2)
         # 2) edges connecting R into decomposed G
         for r in R:
             for d in direction:
                 subnode = self.__get_subnode_coords__(r, d)
-                decomped_G.add_edge(r, subnode, weight=sqrt_2/4)
+                decomped_G.add_edge(r, subnode, weight=0)
 
         # 3) edge between subnodes that belongs to different nodes
         for s, t in G.edges():
@@ -174,7 +174,7 @@ class STCPlanner():
                 self.__exit_error__(self.generate_decomposed_graph)
 
             w = G[s][t]['weight']
-            decomped_G.add_edges_from(dire_edges, weight=0.5*w)
+            decomped_G.add_edges_from(dire_edges, weight=w)
 
         return decomped_G
 
