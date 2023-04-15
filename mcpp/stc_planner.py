@@ -124,7 +124,7 @@ class STCPlanner():
         # return trajectory  # used for ccw_stc
         return trajectory[:-1]
 
-    def generate_decomposed_graph(self, G: nx.Graph, R):
+    def generate_decomposed_graph(self, G:nx.Graph, R):
         decomped_G = nx.Graph()
 
         # 1)edge within subnodes that belongs to one node
@@ -132,8 +132,8 @@ class STCPlanner():
         for node in G.nodes:
             subnode = [self.__get_subnode_coords__(node, d) for d in direction]
             for i in range(4):
-                decomped_G.add_edge(
-                    subnode[i], subnode[(i+1) % 4], weight=0)
+                w = G.nodes[node]["terrain_weight"] / 4
+                decomped_G.add_edge(subnode[i], subnode[(i+1) % 4], weight=w)
 
         sqrt_2 = math.sqrt(2)
         # 2) edges connecting R into decomposed G
@@ -144,7 +144,7 @@ class STCPlanner():
 
         # 3) edge between subnodes that belongs to different nodes
         for s, t in G.edges():
-            dire_edges, diag_edges = [], []
+            dire_edges = []
             direction = self.__get_motion_dir__(s, t)
             if direction == 0:
                 s_sw_node = self.__get_subnode_coords__(s, 'SW')
@@ -173,7 +173,7 @@ class STCPlanner():
             else:
                 self.__exit_error__(self.generate_decomposed_graph)
 
-            w = G[s][t]['weight']
+            w = G[s][t]['weight'] / 4
             decomped_G.add_edges_from(dire_edges, weight=w)
 
         return decomped_G
