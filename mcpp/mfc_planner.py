@@ -43,15 +43,16 @@ class MFCPlanner(STCPlanner):
         paths, weights = [[] for _ in range(self.k)], [0] * self.k
         for idx, val in enumerate(plans.items()):
             depot, serv_pts = val
-            paths[idx].extend(navigate(self.H, depot, serv_pts[0]))
+            depot_small = self.__get_subnode_coords__(depot, "SE")
+            paths[idx].extend([depot] + navigate(self.H, depot_small, serv_pts[0]))
             L, num_of_served = len(serv_pts), 1
 
             for i in range(L-1):
                 if num_of_served == self.capacity:
                     num_of_served = 0
-                    beta = navigate(self.H, paths[idx][-1], depot)
-                    alpha = navigate(self.H, depot, serv_pts[i])
-                    paths[idx].extend(beta[1:-1] + alpha)
+                    beta = navigate(self.H, paths[idx][-1], depot_small)
+                    alpha = navigate(self.H, depot_small, serv_pts[i])
+                    paths[idx].extend(beta[1:-1] + [depot] + alpha)
 
                 dx = serv_pts[i+1][0] - serv_pts[i][0]
                 dy = serv_pts[i+1][1] - serv_pts[i][1]
@@ -64,7 +65,7 @@ class MFCPlanner(STCPlanner):
                 num_of_served += 1
 
             if paths[idx][-1] != depot:
-                paths[idx].extend(navigate(self.H, paths[idx][-1], depot)[1:])
+                paths[idx].extend(navigate(self.H, paths[idx][-1], depot_small)[1:] + [depot])
 
             weights[idx] = self.__get_travel_weights__(paths[idx])
 

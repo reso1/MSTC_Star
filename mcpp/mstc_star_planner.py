@@ -114,16 +114,16 @@ class MSTCStarPlanner(STCPlanner):
 
     def __sim(self, depot, serv_pts):
         path = []
-
-        path.extend(navigate(self.H, depot, serv_pts[0]))
+        depot_small = self.__get_subnode_coords__(depot, "SE")
+        path.extend([depot] + navigate(self.H, depot_small, serv_pts[0]))
         L, num_of_served = len(serv_pts), 1
 
         for i in range(L-1):
             if num_of_served == self.capacity:
                 num_of_served = 0
-                beta = navigate(self.H, path[-1], depot)
-                alpha = navigate(self.H, depot, serv_pts[i])
-                path.extend(beta[1:-1] + alpha)
+                beta = navigate(self.H, path[-1], depot_small)
+                alpha = navigate(self.H, depot_small, serv_pts[i])
+                path.extend(beta[1:-1] + [depot] + alpha)
 
             l1 = abs(serv_pts[i+1][0] - serv_pts[i][0]) + \
                 abs(serv_pts[i+1][1] - serv_pts[i][1])
@@ -136,7 +136,7 @@ class MSTCStarPlanner(STCPlanner):
             num_of_served += 1
 
         if path[-1] != depot:
-            path.extend(navigate(self.H, path[-1], depot)[1:])
+            path.extend(navigate(self.H, path[-1], depot_small)[1:] + [depot])
 
         return path, self.__get_travel_weights__(path)
 
