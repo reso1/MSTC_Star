@@ -7,7 +7,7 @@ SQRT_2 = math.sqrt(2)
 PI = math.pi
 YAW = {(1, 0): ('E', 0), (1, 1): ('NE', PI/4), (0, 1): ('N', PI/2),
        (-1, 1): ('NW', 3*PI/4), (-1, 0): ('W', PI), (-1, -1): ('SW', 5*PI/4),
-       (0, -1): ('S', 3*PI/2), (1, -1): ('SE', 7*PI/4)}
+       (0, -1): ('S', 3*PI/2), (1, -1): ('SE', 7*PI/4), (0, 0): ('E', 0)}
 
 
 class State:
@@ -28,8 +28,12 @@ class Robot:
     def get_cur_state(self, ts):
         """ locate ts in time series T using binary search """
         if ts >= self.T[-1]:
-            self.state.ts = ts
-            return self.N-1, self.state
+            # self.state.ts = ts
+            if type(self.state) is State:
+                self.state.ts = ts
+                return self.N-1, self.state
+            return self.N-1, State(self.state[0], self.state[1], yaw=('E', 0), ts=ts)
+        
 
         ti = bisect.bisect(self.T, ts) - 1
         dx = self.S[ti+1][0] - self.S[ti][0]
